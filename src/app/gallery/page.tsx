@@ -73,11 +73,11 @@ export default function GalleryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-green-900 to-gray-900 p-2 sm:p-4 lg:p-6" style={{
+      <div className="min-h-screen bg-gradient-to-br from-black via-orange-900 to-gray-900 p-2 sm:p-4 lg:p-6" style={{
         backgroundImage: `
-          radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 20% 50%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
           radial-gradient(circle at 80% 20%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
-          radial-gradient(circle at 40% 80%, rgba(34, 197, 94, 0.05) 0%, transparent 50%)
+          radial-gradient(circle at 40% 80%, rgba(249, 115, 22, 0.05) 0%, transparent 50%)
         `
       }}>
         <div className="max-w-7xl mx-auto">
@@ -100,11 +100,11 @@ export default function GalleryPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-green-900 to-gray-900 p-2 sm:p-4 lg:p-6" style={{
+      <div className="min-h-screen bg-gradient-to-br from-black via-orange-900 to-gray-900 p-2 sm:p-4 lg:p-6" style={{
         backgroundImage: `
-          radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 20% 50%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
           radial-gradient(circle at 80% 20%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
-          radial-gradient(circle at 40% 80%, rgba(34, 197, 94, 0.05) 0%, transparent 50%)
+          radial-gradient(circle at 40% 80%, rgba(249, 115, 22, 0.05) 0%, transparent 50%)
         `
       }}>
         <div className="max-w-7xl mx-auto">
@@ -139,7 +139,7 @@ export default function GalleryPage() {
             HISTORIAS DE SUPERVIVENCIA COMPARTIDAS POR LA COMUNIDAD
           </p>
           <div className="px-2">
-            <Badge variant="secondary" className="text-xs sm:text-sm md:text-base lg:text-lg px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2 lg:px-6 lg:py-3 bg-green-800 border-2 border-green-400 text-green-100 font-mono pixel-button max-w-full break-words text-center inline-block">
+            <Badge variant="secondary" className="text-xs sm:text-sm md:text-base lg:text-lg px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2 lg:px-6 lg:py-3 bg-orange-800 border-2 border-orange-400 text-orange-100 font-mono pixel-button max-w-full break-words text-center inline-block">
               💀 {pagination.totalCount} HISTORIAS DE SUPERVIVIENTES 💀
             </Badge>
           </div>
@@ -160,40 +160,40 @@ export default function GalleryPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 px-2 sm:px-0">
             {stories.map((story) => (
               <Link key={story.id} href={`/story/${story.id}`}>
-                <Card className="bg-black/80 border-2 border-green-600/50 hover:border-green-400 hover:shadow-lg hover:shadow-green-400/20 transition-all duration-300 hover:scale-105 cursor-pointer h-full pixel-border">
-                  <CardHeader className="pb-2 sm:pb-3 bg-gradient-to-r from-green-900/30 to-red-900/30 p-3 sm:p-4 lg:p-6">
+                <Card className="bg-black/80 border-2 border-orange-600/50 hover:border-orange-400 hover:shadow-lg hover:shadow-orange-400/20 transition-all duration-300 hover:scale-105 cursor-pointer h-full pixel-border">
+                  <CardHeader className="pb-2 sm:pb-3 bg-gradient-to-r from-orange-900/30 to-red-900/30 p-3 sm:p-4 lg:p-6">
                     <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
-                      <Avatar className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 border-2 border-green-400 flex-shrink-0">
+                      <Avatar className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 border-2 border-orange-400 flex-shrink-0">
                         <AvatarImage 
                           src={story.characterImageUrl || undefined} 
                           alt={story.characterFullName}
                         />
-                        <AvatarFallback className="bg-green-700 text-green-100 font-mono text-xs sm:text-sm">
+                        <AvatarFallback className="bg-orange-700 text-orange-100 font-mono text-xs sm:text-sm">
                           {story.characterFullName.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs sm:text-sm font-medium text-green-300 truncate font-mono">
+                        <p className="text-xs sm:text-sm font-medium text-orange-300 truncate font-mono">
                           🧟 {story.characterFullName}
                         </p>
-                        <p className="text-xs text-green-400 truncate font-mono">
+                        <p className="text-xs text-orange-400 truncate font-mono">
                           👤 {story.userName}
                         </p>
                       </div>
                     </div>
-                    <CardTitle className="text-green-100 text-sm sm:text-base lg:text-lg line-clamp-2 font-mono pixel-text leading-tight">
+                    <CardTitle className="text-orange-100 text-sm sm:text-base lg:text-lg line-clamp-2 font-mono pixel-text leading-tight">
                       📖 {story.title || 'Historia sin título'}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="bg-black/60 p-3 sm:p-4 lg:p-6">
                     <div className="space-y-2 sm:space-y-3">
-                      <div className="flex items-center justify-between text-xs sm:text-sm text-green-300 font-mono gap-2">
+                      <div className="flex items-center justify-between text-xs sm:text-sm text-orange-300 font-mono gap-2">
                         <div className="flex items-center space-x-1">
-                          <BookOpen className="h-3 w-3 sm:h-4 sm:w-4 text-green-400 flex-shrink-0" />
+                          <BookOpen className="h-3 w-3 sm:h-4 sm:w-4 text-orange-400 flex-shrink-0" />
                           <span className='text-white'>{story.sceneCount}</span>
                         </div>
                         <div className="flex items-center space-x-1 min-w-0 flex-1">
-                          <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-green-400 flex-shrink-0" />
+                          <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-orange-400 flex-shrink-0" />
                           <span className="text-xs truncate max-w-16 sm:max-w-24 md:max-w-none">
                             Activo {formatDistanceToNow(new Date(story.lastActive), {
                               addSuffix: false,
@@ -202,7 +202,7 @@ export default function GalleryPage() {
                           </span>
                         </div>
                       </div>
-                      <Badge variant="outline" className="w-full justify-center bg-green-800 border-green-400 text-green-100 hover:bg-green-700 font-mono pixel-button text-xs sm:text-sm py-1 sm:py-2">
+                      <Badge variant="outline" className="w-full justify-center bg-orange-800 border-orange-400 text-orange-100 hover:bg-orange-700 font-mono pixel-button text-xs sm:text-sm py-1 sm:py-2">
                         🧟 LEER HISTORIA 🧟
                       </Badge>
                     </div>
@@ -220,7 +220,7 @@ export default function GalleryPage() {
               variant="outline"
               onClick={() => handlePageChange(pagination.currentPage - 1)}
               disabled={!pagination.hasPreviousPage}
-              className="flex items-center space-x-1 sm:space-x-2 bg-green-800 border-2 border-green-400 text-green-100 hover:bg-green-700 font-mono pixel-button disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2 w-full sm:w-auto"
+              className="flex items-center space-x-1 sm:space-x-2 bg-orange-800 border-2 border-orange-400 text-orange-100 hover:bg-orange-700 font-mono pixel-button disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2 w-full sm:w-auto"
             >
               <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
               <span>⬅️ ANTERIOR</span>
@@ -237,14 +237,14 @@ export default function GalleryPage() {
                   const showEllipsis = index > 0 && array[index - 1] !== page - 1;
                   return (
                     <div key={page} className="flex items-center space-x-1 sm:space-x-2">
-                      {showEllipsis && <span className="text-green-400 font-mono text-xs sm:text-sm">💀</span>}
+                      {showEllipsis && <span className="text-orange-400 font-mono text-xs sm:text-sm">💀</span>}
                       <Button
                         variant={page === pagination.currentPage ? "default" : "outline"}
                         onClick={() => handlePageChange(page)}
                         className={`w-8 h-8 sm:w-10 sm:h-10 p-0 font-mono pixel-button border-2 text-xs sm:text-sm flex-shrink-0 ${
                           page === pagination.currentPage 
                             ? 'bg-red-600 border-red-400 text-white hover:bg-red-700' 
-                            : 'bg-green-800 border-green-400 text-green-100 hover:bg-green-700'
+                            : 'bg-orange-800 border-orange-400 text-orange-100 hover:bg-orange-700'
                         }`}
                       >
                         {page}
@@ -258,7 +258,7 @@ export default function GalleryPage() {
               variant="outline"
               onClick={() => handlePageChange(pagination.currentPage + 1)}
               disabled={!pagination.hasNextPage}
-              className="flex items-center space-x-1 sm:space-x-2 bg-green-800 border-2 border-green-400 text-green-100 hover:bg-green-700 font-mono pixel-button disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2 w-full sm:w-auto"
+              className="flex items-center space-x-1 sm:space-x-2 bg-orange-800 border-2 border-orange-400 text-orange-100 hover:bg-orange-700 font-mono pixel-button disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2 w-full sm:w-auto"
             >
               <span>SIGUIENTE ➡️</span>
               <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />

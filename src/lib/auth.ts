@@ -31,11 +31,11 @@ export const auth = betterAuth({
         to: user.email,
         subject: '🧟‍♂️ Restablece tu contraseña - Zombie Story',
         html: `
-          <div style="font-family: monospace; background: #1a1a1a; color: #00ff00; padding: 20px;">
+          <div style="font-family: monospace; background: #1a1a1a; color: #f97316; padding: 20px;">
             <h1 style="color: #ff0000;">🧟‍♂️ ZOMBIE STORY</h1>
             <p>Hola superviviente,</p>
             <p>Recibimos una solicitud para restablecer tu contraseña.</p>
-            <a href="${url}" style="background: #00ff00; color: #000; padding: 10px 20px; text-decoration: none; border-radius: 4px;">RESTABLECER CONTRASEÑA</a>
+            <a href="${url}" style="background: #f97316; color: #000; padding: 10px 20px; text-decoration: none; border-radius: 4px;">RESTABLECER CONTRASEÑA</a>
             <p>Si no solicitaste esto, ignora este email.</p>
             <p>¡Mantente con vida!</p>
           </div>
@@ -54,7 +54,7 @@ export const auth = betterAuth({
         to: user.email,
         subject: '🧟‍♂️ ¡Bienvenido a Zombie Story!',
         html: `
-          <div style="font-family: monospace; background: #1a1a1a; color: #00ff00; padding: 20px;">
+          <div style="font-family: monospace; background: #1a1a1a; color: #f97316; padding: 20px;">
             <h1 style="color: #ff0000;">🧟‍♂️ ZOMBIE STORY</h1>
             <p>¡Bienvenido, superviviente!</p>
             <p>Tu cuenta ha sido creada exitosamente con el email: <strong>${user.email}</strong></p>

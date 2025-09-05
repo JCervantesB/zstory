@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
@@ -47,19 +48,22 @@ export default function SignUpPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-green-400 pixel-text hover:text-green-300">
-            🧟‍♂️ ZOMBIE STORY
+          <Link href="/" className="flex flex-col items-center hover:opacity-80 transition-opacity">
+            <Image src="/logo.png" alt="Zombie Story Logo" width={80} height={80} className="mb-4" />
+            <span className="text-2xl font-bold text-accent font-mono pixel-text">
+              ZOMBIE STORY
+            </span>
           </Link>
           <h1 className="text-3xl font-bold mt-4 mb-2 text-red-500 pixel-text">
             ÚNETE A LA SUPERVIVENCIA
           </h1>
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             Crea tu cuenta para comenzar tu aventura apocalíptica
           </p>
         </div>
 
         {/* Registration Form */}
-        <div className="bg-black border-4 border-green-400 p-8 rounded-lg">
+        <div className="bg-card border-4 border-accent p-8 rounded-lg">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-900 border border-red-500 p-3 rounded text-red-200 text-sm">
@@ -68,7 +72,7 @@ export default function SignUpPage() {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-green-400 font-bold mb-2">
+              <label htmlFor="email" className="block text-accent font-bold mb-2">
                 EMAIL DE CONTACTO
               </label>
               <input
@@ -76,14 +80,14 @@ export default function SignUpPage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 bg-gray-800 border-2 border-gray-600 rounded text-white focus:border-green-400 focus:outline-none pixel-input"
+                className="w-full p-3 bg-background border-2 border-border rounded text-foreground focus:border-accent focus:outline-none pixel-input"
                 placeholder="tu@email.com"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-green-400 font-bold mb-2">
+              <label htmlFor="password" className="block text-accent font-bold mb-2">
                 CONTRASEÑA SEGURA
               </label>
               <input
@@ -91,12 +95,12 @@ export default function SignUpPage() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 bg-gray-800 border-2 border-gray-600 rounded text-white focus:border-green-400 focus:outline-none pixel-input"
+                className="w-full p-3 bg-background border-2 border-border rounded text-foreground focus:border-accent focus:outline-none pixel-input"
                 placeholder="Mínimo 8 caracteres"
                 required
                 minLength={8}
               />
-              <p className="text-gray-500 text-xs mt-1">
+              <p className="text-muted-foreground text-xs mt-1">
                 💡 Usa una contraseña fuerte para proteger tu progreso
               </p>
             </div>
@@ -104,7 +108,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white font-bold rounded-lg transition-colors pixel-button transform hover:scale-105 disabled:transform-none"
+              className="w-full py-3 bg-destructive hover:bg-destructive/90 disabled:bg-muted text-destructive-foreground font-bold rounded-lg transition-colors pixel-button transform hover:scale-105 disabled:transform-none"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -118,16 +122,16 @@ export default function SignUpPage() {
           </form>
 
           {/* Social Login Options */}
-          <div className="mt-6 pt-6 border-t border-gray-700">
-            <p className="text-center text-gray-400 mb-4 text-sm">
+          <div className="mt-6 pt-6 border-t border-border">
+            <p className="text-center text-muted-foreground mb-4 text-sm">
               O únete usando:
             </p>
             <div className="space-y-3">
-              <button className="w-full py-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white rounded transition-colors flex items-center justify-center">
+              <button className="w-full py-2 bg-muted hover:bg-muted/80 border border-border text-foreground rounded transition-colors flex items-center justify-center">
                 <span className="mr-2">📧</span>
                 Google (Próximamente)
               </button>
-              <button className="w-full py-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white rounded transition-colors flex items-center justify-center">
+              <button className="w-full py-2 bg-muted hover:bg-muted/80 border border-border text-foreground rounded transition-colors flex items-center justify-center">
                 <span className="mr-2">🐙</span>
                 GitHub (Próximamente)
               </button>
@@ -136,9 +140,9 @@ export default function SignUpPage() {
 
           {/* Login Link */}
           <div className="mt-6 text-center">
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               ¿Ya eres un superviviente?{" "}
-              <Link href="/auth/sign-in" className="text-green-400 hover:underline font-bold">
+              <Link href="/auth/sign-in" className="text-accent hover:underline font-bold">
                 Inicia sesión aquí
               </Link>
             </p>

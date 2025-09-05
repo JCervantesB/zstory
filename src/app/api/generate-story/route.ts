@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Randomly include a secondary character (10% chance)
-    const shouldIncludeSecondary = Math.random() < 0.99;
+    const shouldIncludeSecondary = Math.random() < 0.20;
     let secondaryCharacter: {
       name: string;
       lastName: string;

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { signIn } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
@@ -37,19 +38,22 @@ export default function SignInPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-bold text-green-400 pixel-text hover:text-green-300">
-            🧟‍♂️ ZOMBIE STORY
+          <Link href="/" className="flex flex-col items-center hover:opacity-80 transition-opacity">
+            <Image src="/logo.png" alt="Zombie Story Logo" width={80} height={80} className="mb-4" />
+            <span className="text-2xl font-bold text-accent font-mono pixel-text">
+              ZOMBIE STORY
+            </span>
           </Link>
           <h1 className="text-3xl font-bold mt-4 mb-2 text-red-500 pixel-text">
             REGRESO AL APOCALIPSIS
           </h1>
-          <p className="text-gray-400">
+          <p className="text-muted-foreground">
             Inicia sesión para continuar tu supervivencia
           </p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-black border-4 border-green-400 p-8 rounded-lg">
+        <div className="bg-card border-4 border-accent p-8 rounded-lg">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-900 border border-red-500 p-3 rounded text-red-200 text-sm">
@@ -58,7 +62,7 @@ export default function SignInPage() {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-green-400 font-bold mb-2">
+              <label htmlFor="email" className="block text-accent font-bold mb-2">
                 EMAIL DE SUPERVIVIENTE
               </label>
               <input
@@ -66,14 +70,14 @@ export default function SignInPage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 bg-gray-800 border-2 border-gray-600 rounded text-white focus:border-green-400 focus:outline-none pixel-input"
+                className="w-full p-3 bg-background border-2 border-border rounded text-foreground focus:border-accent focus:outline-none pixel-input"
                 placeholder="tu@email.com"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-green-400 font-bold mb-2">
+              <label htmlFor="password" className="block text-accent font-bold mb-2">
                 CONTRASEÑA
               </label>
               <input
@@ -81,16 +85,16 @@ export default function SignInPage() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 bg-gray-800 border-2 border-gray-600 rounded text-white focus:border-green-400 focus:outline-none pixel-input"
+                className="w-full p-3 bg-background border-2 border-border rounded text-foreground focus:border-accent focus:outline-none pixel-input"
                 placeholder="Tu contraseña secreta"
                 required
               />
               <div className="flex justify-between items-center mt-2">
-                <label className="flex items-center text-sm text-gray-400">
+                <label className="flex items-center text-sm text-muted-foreground">
                   <input type="checkbox" className="mr-2" />
                   Recordarme
                 </label>
-                <Link href="/auth/forgot-password" className="text-green-400 hover:underline text-sm">
+                <Link href="/auth/forgot-password" className="text-accent hover:underline text-sm">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
@@ -113,16 +117,16 @@ export default function SignInPage() {
           </form>
 
           {/* Social Login Options */}
-          <div className="mt-6 pt-6 border-t border-gray-700">
-            <p className="text-center text-gray-400 mb-4 text-sm">
+          <div className="mt-6 pt-6 border-t border-border">
+            <p className="text-center text-muted-foreground mb-4 text-sm">
               O accede usando:
             </p>
             <div className="space-y-3">
-              <button className="w-full py-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white rounded transition-colors flex items-center justify-center">
+              <button className="w-full py-2 bg-background hover:bg-muted border border-border text-foreground rounded transition-colors flex items-center justify-center">
                 <span className="mr-2">📧</span>
                 Google (Próximamente)
               </button>
-              <button className="w-full py-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white rounded transition-colors flex items-center justify-center">
+              <button className="w-full py-2 bg-background hover:bg-muted border border-border text-foreground rounded transition-colors flex items-center justify-center">
                 <span className="mr-2">🐙</span>
                 GitHub (Próximamente)
               </button>
@@ -131,9 +135,9 @@ export default function SignInPage() {
 
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               ¿Nuevo en el apocalipsis?{" "}
-              <Link href="/auth/sign-up" className="text-green-400 hover:underline font-bold">
+              <Link href="/auth/sign-up" className="text-accent hover:underline font-bold">
                 Crea tu cuenta aquí
               </Link>
             </p>

@@ -30,7 +30,7 @@ function HomePage() {
             </Link>
             <Link 
               href="/auth/sign-in" 
-              className="px-3 py-2 sm:px-4 border border-green-400 text-green-400 hover:bg-green-400 hover:text-black transition-colors pixel-button text-center text-sm sm:text-base"
+              className="px-3 py-2 sm:px-4 border border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-black transition-colors pixel-button text-center text-sm sm:text-base"
             >
               INICIAR SESIÓN
             </Link>
@@ -61,7 +61,7 @@ function HomePage() {
         {/* Game Preview */}
         <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-green-400 pixel-text">
+            <h2 className="text-3xl font-bold text-orange-400 pixel-text">
               ¿TIENES LO NECESARIO PARA SOBREVIVIR?
             </h2>
             <div className="space-y-4 text-gray-300">
@@ -90,7 +90,7 @@ function HomePage() {
           </div>
           
           {/* Mock Game Interface */}
-          <div className="bg-black border-4 border-green-400 p-6 rounded-lg">
+          <div className="bg-black border-4 border-orange-400 p-6 rounded-lg">
             <div className="relative bg-gray-700 h-48 md:h-56 lg:h-64 rounded mb-4 overflow-hidden">
               <Image 
                 src="https://res.cloudinary.com/dtzshajzs/image/upload/v1757030960/zombie-story/scenes/scene_3b7021fa-c4df-4635-83f2-b5507d6cbbce_0_1757030948935.webp"
@@ -101,7 +101,7 @@ function HomePage() {
               />
             </div>
             <div className="bg-gray-800 p-4 rounded mb-4">
-              <div className="text-green-400 text-sm mb-2">[ESCENA 1]</div>
+              <div className="text-orange-400 text-sm mb-2">[ESCENA 1]</div>
               <p className="text-gray-300 text-sm leading-relaxed">
                 Te despiertas en un hospital abandonado. El silencio es ensordecedor, 
                 solo interrumpido por gemidos distantes. Tu ropa está manchada de sangre...
@@ -110,7 +110,7 @@ function HomePage() {
             {/* Chat Input Simulation */}
             <div className="bg-gray-900 border border-gray-600 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
                 <span className="text-xs text-gray-400">Tú escribes...</span>
               </div>
               <div className="bg-gray-800 border border-gray-600 rounded p-3 text-gray-300 text-sm min-h-[72px] flex items-start">
@@ -136,7 +136,7 @@ function HomePage() {
                       delay: 75,
                       deleteSpeed: 50,
                       cursor: '|',
-                      cursorClassName: 'text-green-400'
+                      cursorClassName: 'text-orange-400'
                     }}
                   />
               </div>
@@ -170,7 +170,7 @@ function HomePage() {
           </Link>
           <div className="mt-4 text-gray-400">
             ¿Ya tienes cuenta?{" "}
-            <Link href="/auth/sign-in" className="text-green-400 hover:underline">
+            <Link href="/auth/sign-in" className="text-orange-400 hover:underline">
               Inicia sesión aquí
             </Link>
           </div>
@@ -180,17 +180,17 @@ function HomePage() {
         <div className="grid md:grid-cols-3 gap-8 mt-16">
           <div className="text-center p-6 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-4xl mb-4">🎲</div>
-            <h3 className="text-xl font-bold mb-2 text-green-400">Decisiones Importantes</h3>
+            <h3 className="text-xl font-bold mb-2 text-orange-400">Decisiones Importantes</h3>
             <p className="text-gray-400">Cada elección afecta tu historia y supervivencia</p>
           </div>
           <div className="text-center p-6 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-4xl mb-4">🔄</div>
-            <h3 className="text-xl font-bold mb-2 text-green-400">Historias Infinitas</h3>
+            <h3 className="text-xl font-bold mb-2 text-orange-400">Historias Infinitas</h3>
             <p className="text-gray-400">Juega múltiples partidas con narrativas diferentes</p>
           </div>
           <div className="text-center p-6 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-4xl mb-4">💾</div>
-            <h3 className="text-xl font-bold mb-2 text-green-400">Guarda y Comparte</h3>
+            <h3 className="text-xl font-bold mb-2 text-orange-400">Guarda y Comparte</h3>
             <p className="text-gray-400">Guarda tu progreso y comparte tus aventuras</p>
           </div>
         </div>
