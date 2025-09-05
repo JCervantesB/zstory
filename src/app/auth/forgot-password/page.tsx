@@ -44,7 +44,7 @@ function ForgotPasswordContent() {
     try {
       await forgetPassword({
         email,
-        redirectTo: `${window.location.origin}/auth/forgot-password`,
+        redirectTo: `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/auth/forgot-password`,
       });
       
       setSuccess("Se ha enviado un enlace de restablecimiento a tu email. Revisa tu bandeja de entrada.");
