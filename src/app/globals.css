@@ -1,26 +1,218 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+  /* Logo colors: #ed912e, #d8581f, #708b47, #353b30 */
+  --background: oklch(0.98 0.01 85);
+  --foreground: oklch(0.25 0.02 120);
+  --card: oklch(0.96 0.01 85);
+  --card-foreground: oklch(0.25 0.02 120);
+  --popover: oklch(0.96 0.01 85);
+  --popover-foreground: oklch(0.25 0.02 120);
+  --primary: oklch(0.65 0.15 45); /* #ed912e - orange */
+  --primary-foreground: oklch(0.98 0.01 85);
+  --secondary: oklch(0.55 0.12 120); /* #708b47 - green */
+  --secondary-foreground: oklch(0.98 0.01 85);
+  --muted: oklch(0.92 0.01 85);
+  --muted-foreground: oklch(0.45 0.02 120);
+  --accent: oklch(0.58 0.18 35); /* #d8581f - red-orange */
+  --accent-foreground: oklch(0.98 0.01 85);
+  --destructive: oklch(0.58 0.18 35); /* #d8581f - red-orange */
+  --border: oklch(0.85 0.01 85);
+  --input: oklch(0.85 0.01 85);
+  --ring: oklch(0.65 0.15 45);
+  --chart-1: oklch(0.65 0.15 45); /* #ed912e */
+  --chart-2: oklch(0.58 0.18 35); /* #d8581f */
+  --chart-3: oklch(0.55 0.12 120); /* #708b47 */
+  --chart-4: oklch(0.25 0.02 120); /* #353b30 */
+  --chart-5: oklch(0.45 0.08 75);
+  --sidebar: oklch(0.96 0.01 85);
+  --sidebar-foreground: oklch(0.25 0.02 120);
+  --sidebar-primary: oklch(0.65 0.15 45);
+  --sidebar-primary-foreground: oklch(0.98 0.01 85);
+  --sidebar-accent: oklch(0.92 0.01 85);
+  --sidebar-accent-foreground: oklch(0.25 0.02 120);
+  --sidebar-border: oklch(0.85 0.01 85);
+  --sidebar-ring: oklch(0.65 0.15 45);
+}
+
+.dark {
+  /* Dark theme with logo colors: #ed912e, #d8581f, #708b47, #353b30 */
+  --background: oklch(0.12 0.02 120); /* Darker background for better contrast */
+  --foreground: oklch(0.95 0.01 85);
+  --card: oklch(0.18 0.02 120); /* Improved card contrast */
+  --card-foreground: oklch(0.95 0.01 85);
+  --popover: oklch(0.18 0.02 120);
+  --popover-foreground: oklch(0.95 0.01 85);
+  --primary: oklch(0.75 0.18 45); /* Brighter #ed912e for dark mode */
+  --primary-foreground: oklch(0.12 0.02 120);
+  --secondary: oklch(0.65 0.15 120); /* Brighter #708b47 for dark mode */
+  --secondary-foreground: oklch(0.12 0.02 120);
+  --muted: oklch(0.25 0.02 120);
+  --muted-foreground: oklch(0.68 0.01 85);
+  --accent: oklch(0.68 0.22 35); /* Brighter #d8581f for dark mode */
+  --accent-foreground: oklch(0.12 0.02 120);
+  --destructive: oklch(0.68 0.22 35); /* Brighter #d8581f */
+  --border: oklch(0.32 0.02 120);
+  --input: oklch(0.28 0.02 120);
+  --ring: oklch(0.75 0.18 45);
+  --chart-1: oklch(0.75 0.18 45); /* Bright #ed912e */
+  --chart-2: oklch(0.68 0.22 35); /* Bright #d8581f */
+  --chart-3: oklch(0.65 0.15 120); /* Bright #708b47 */
+  --chart-4: oklch(0.35 0.02 120); /* Dark #353b30 */
+  --chart-5: oklch(0.55 0.12 75);
+  --sidebar: oklch(0.18 0.02 120);
+  --sidebar-foreground: oklch(0.95 0.01 85);
+  --sidebar-primary: oklch(0.75 0.18 45);
+  --sidebar-primary-foreground: oklch(0.12 0.02 120);
+  --sidebar-accent: oklch(0.25 0.02 120);
+  --sidebar-accent-foreground: oklch(0.95 0.01 85);
+  --sidebar-border: oklch(0.32 0.02 120);
+  --sidebar-ring: oklch(0.75 0.18 45);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+.pixelated {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+p + p {
+  margin-top: 16px;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  /* Firefox */
+  scrollbar-width: none;
+  /* Safari and Chrome */
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Pixel Art Styles for Zombie Theme */
+.pixel-text {
+  font-family: 'Courier New', monospace;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+  letter-spacing: 1px;
+}
+
+.pixel-button {
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 0;
+  box-shadow: 
+    2px 2px 0px rgba(0, 0, 0, 0.8),
+    inset -1px -1px 0px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+}
+
+.pixel-button:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 
+    1px 1px 0px rgba(0, 0, 0, 0.8),
+    inset -1px -1px 0px rgba(0, 0, 0, 0.3);
+}
+
+.pixel-border {
+  border-radius: 0;
+  border-style: solid;
+  box-shadow: 
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Zombie-themed animations with logo colors */
+@keyframes zombie-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(112, 139, 71, 0.5); /* #708b47 green */
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(112, 139, 71, 0.8), 0 0 30px rgba(112, 139, 71, 0.6);
+  }
+}
+
+.zombie-glow {
+  animation: zombie-glow 2s ease-in-out infinite;
+}
+
+@keyframes blood-drip {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+.blood-drip {
+  animation: blood-drip 3s linear infinite;
+}
+
+/* Hide scrollbar for pagination */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

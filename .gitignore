@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+REAL_TIME_UPDATES.md
+BETTER_AUTH_SETUP.md

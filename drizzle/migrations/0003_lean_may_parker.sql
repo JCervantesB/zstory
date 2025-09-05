@@ -1,0 +1,1 @@
+ALTER TABLE "game_sessions" ADD COLUMN "isPublic" boolean DEFAULT false NOT NULL;
