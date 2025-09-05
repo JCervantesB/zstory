@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { forgetPassword, resetPassword } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordContent() {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -252,5 +252,29 @@ export default function ForgotPasswordPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+// Loading component for Suspense fallback
+function ForgotPasswordLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-red-900 to-black text-white font-mono flex items-center justify-center p-6">
+      <div className="w-full max-w-md">
+        <div className="bg-black/50 backdrop-blur-sm border border-red-500/30 rounded-lg p-8 shadow-2xl">
+          <div className="text-center">
+            <div className="animate-pulse text-red-400 text-lg mb-4">Cargando...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense fallback={<ForgotPasswordLoading />}>
+      <ForgotPasswordContent />
+    </Suspense>
   );
 }
