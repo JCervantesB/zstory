@@ -207,7 +207,7 @@ export function SessionHistory({ onSessionSelect, onNewSession }: SessionHistory
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-3 sm:gap-4 md:gap-5 lg:gap-4 xl:gap-5 2xl:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 auto-rows-fr">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 auto-rows-fr">
           {sessions.map((session) => (
             <Card key={session.id} className="bg-gray-800 border-gray-700 hover:shadow-lg transition-all duration-200 hover:scale-[1.02] hover:border-gray-600 flex flex-col h-full">
               <CardHeader className="pb-2 px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-4 lg:px-4 lg:py-3 xl:px-5 xl:py-4 2xl:px-6 2xl:py-5 flex-shrink-0">
