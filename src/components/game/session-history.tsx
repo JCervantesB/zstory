@@ -245,7 +245,7 @@ export function SessionHistory({ onSessionSelect, onNewSession }: SessionHistory
                       </div>
                     ) : (
                       <div className="flex items-center gap-1 group">
-                        <CardTitle className="text-sm sm:text-base md:text-base lg:text-sm xl:text-base 2xl:text-lg 3xl:text-xl line-clamp-2 text-white leading-tight flex-1">
+                        <CardTitle className="text-base sm:text-lg md:text-lg lg:text-base xl:text-lg 2xl:text-xl 3xl:text-2xl line-clamp-2 text-white leading-tight flex-1 font-semibold">
                           {session.title}
                         </CardTitle>
                         <Button
@@ -264,15 +264,6 @@ export function SessionHistory({ onSessionSelect, onNewSession }: SessionHistory
                       <span className="truncate">{formatDate(session.lastActive || session.createdAt)}</span>
                     </CardDescription>
                   </div>
-                  <Badge 
-                    variant={session.isCompleted ? 'secondary' : 'default'}
-                    className={`text-xs sm:text-xs md:text-sm lg:text-xs xl:text-sm 2xl:text-sm 3xl:text-base px-2 py-1 sm:px-2 sm:py-1 md:px-3 md:py-1.5 lg:px-2 lg:py-1 xl:px-3 xl:py-1.5 2xl:px-3 2xl:py-1.5 3xl:px-4 3xl:py-2 flex-shrink-0 ${
-                      session.isCompleted ? 'bg-green-600 text-white' : 'bg-orange-600 text-white'
-                    }`}
-                  >
-                    <span className="hidden sm:inline">{session.isCompleted ? 'Completada' : 'En progreso'}</span>
-                    <span className="sm:hidden">{session.isCompleted ? 'OK' : 'En curso'}</span>
-                  </Badge>
                 </div>
               </CardHeader>
               <CardContent className="pt-0 pb-3 px-3 sm:px-4 sm:pb-4 md:px-5 md:pb-4 lg:px-4 lg:pb-3 xl:px-5 xl:pb-4 2xl:px-6 2xl:pb-5 flex-1 flex flex-col justify-end">
@@ -310,7 +301,7 @@ export function SessionHistory({ onSessionSelect, onNewSession }: SessionHistory
                       onClick={() => handleTogglePublic(session.id, session.isPublic ?? true)}
                       variant="ghost"
                       size="sm"
-                      className={`flex items-center gap-1.5 sm:gap-2 text-xs sm:text-xs md:text-sm lg:text-xs xl:text-sm 2xl:text-sm 3xl:text-base px-2 py-1.5 sm:px-2 sm:py-1.5 md:px-3 md:py-2 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 2xl:px-3 2xl:py-2 3xl:px-4 3xl:py-2.5 h-auto flex-1 ${
+                      className={`flex items-center gap-1 text-xs px-2 py-1.5 h-auto flex-1 min-w-0 ${
                         (session.isPublic ?? true)
                           ? 'text-green-400 hover:text-green-300 hover:bg-green-900/20' 
                           : 'text-red-400 hover:text-red-300 hover:bg-red-900/20'
@@ -321,11 +312,11 @@ export function SessionHistory({ onSessionSelect, onNewSession }: SessionHistory
                       {sharingSessionId === session.id ? (
                         <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current"></div>
                       ) : (session.isPublic ?? true) ? (
-                        <Globe className="h-3 w-3 lg:h-4 lg:w-4 xl:h-3 xl:w-3 2xl:h-4 2xl:w-4" />
+                        <Globe className="h-3 w-3 flex-shrink-0" />
                       ) : (
-                        <Lock className="h-3 w-3 lg:h-4 lg:w-4 xl:h-3 xl:w-3 2xl:h-4 2xl:w-4" />
+                        <Lock className="h-3 w-3 flex-shrink-0" />
                       )}
-                      <span className="hidden sm:inline">
+                      <span className="hidden md:inline truncate">
                         {(session.isPublic ?? true) ? 'Visible' : 'Privada'}
                       </span>
                     </Button>
@@ -335,11 +326,11 @@ export function SessionHistory({ onSessionSelect, onNewSession }: SessionHistory
                         onClick={() => handleCopyPublicLink(session.id)}
                         variant="ghost"
                         size="sm"
-                        className="flex items-center gap-1.5 sm:gap-2 text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 text-xs sm:text-xs md:text-sm lg:text-xs xl:text-sm 2xl:text-sm 3xl:text-base px-2 py-1.5 sm:px-2 sm:py-1.5 md:px-3 md:py-2 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 2xl:px-3 2xl:py-2 3xl:px-4 3xl:py-2.5 h-auto flex-shrink-0"
+                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 hover:bg-blue-900/20 text-xs px-2 py-1.5 h-auto flex-shrink-0 min-w-0"
                         data-tour="share-link-button"
                       >
-                        <Share2 className="h-3 w-3 lg:h-4 lg:w-4 xl:h-3 xl:w-3 2xl:h-4 2xl:w-4" />
-                        <span className="hidden sm:inline">Copiar enlace</span>
+                        <Share2 className="h-3 w-3 flex-shrink-0" />
+                        <span className="hidden md:inline truncate">Copiar</span>
                       </Button>
                     )}
                   </div>
