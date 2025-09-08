@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AuthWrapper } from "@/components/auth/AuthWrapper";
 import { CharacterRedirectWrapper } from "@/components/auth/CharacterRedirectWrapper";
 import { EditCharacterModal } from "@/components/character/EditCharacterModal";
@@ -33,6 +33,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, BookOpen, Edit, MessageCircle, LogOut, Gamepad2, History, Globe } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { useDashboardTour } from "@/hooks/use-dashboard-tour";
+import "@/styles/tour.css";
 
 function CharacterDashboardContent() {
   const { data: session } = useSession();
@@ -41,8 +43,20 @@ function CharacterDashboardContent() {
   const [currentUser] = useState<SessionUser | null>(session?.user as SessionUser);
   const [activeTab, setActiveTab] = useState("adventures");
   const router = useRouter();
+  const { isFirstVisit, startTour, resetTour } = useDashboardTour(setActiveTab);
 
   const user = currentUser || (session?.user as SessionUser);
+
+  // Iniciar tour automáticamente en la primera visita
+  useEffect(() => {
+    if (isFirstVisit && user) {
+      // Delay para asegurar que todos los elementos estén renderizados
+      const timer = setTimeout(() => {
+        startTour();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isFirstVisit, user, startTour]);
 
   const handleStartStoryChat = async () => {
     setLoading(true);
@@ -150,21 +164,31 @@ function CharacterDashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* Header */}
       <div className="bg-card border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 py-4 md:py-6">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 md:py-6">
           <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-            <div className="flex items-center space-x-3 md:space-x-4">
-              <div className="text-2xl md:text-3xl">
+            <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0">
+              <div className="text-2xl md:text-3xl flex-shrink-0">
                 <Image src="/logo.png" alt="Zombie Story Logo" width={80} height={80} />
               </div>
-              <div>
-                <h1 className="text-xl md:text-2xl font-bold text-accent font-mono pixel-text">DASHBOARD ZOMBIE</h1>
-                <p className="text-sm md:text-base text-muted-foreground font-mono">Centro de Control del Superviviente</p>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-accent font-mono pixel-text truncate">DASHBOARD ZOMBIE</h1>
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground font-mono truncate">Centro de Control del Superviviente</p>
               </div>
             </div>
             <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
+              <Button
+                onClick={resetTour}
+                variant="outline"
+                size="sm"
+                className="border-accent text-accent hover:bg-accent/20 w-full sm:w-auto"
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                <span className="hidden sm:inline">Ver Tutorial</span>
+                <span className="sm:hidden">Tutorial</span>
+              </Button>
               <Button
                 onClick={handleEditCharacter}
                 variant="outline"
@@ -191,9 +215,9 @@ function CharacterDashboardContent() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 py-6 md:py-8">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6 md:py-8 overflow-x-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-card border-border">
+          <TabsList className="grid w-full grid-cols-2 bg-card border-border" data-tour="tabs-list">
             <TabsTrigger
               value="character"
               className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground text-muted-foreground flex items-center justify-center px-2 py-2"
@@ -216,29 +240,33 @@ function CharacterDashboardContent() {
               <div className="lg:col-span-2">
                 <Card className="bg-card border-border">
                   <CardHeader>
-                    <CardTitle className="flex items-center justify-between text-white text-lg md:text-xl">
-                      <div className="flex items-center">
-                        <User className="w-5 h-5 mr-2 text-accent" />
-                        Información del Personaje
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-2">
-                          <div className="flex items-center space-x-2">
-                            <MessageCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                            <p className="text-xs text-blue-700 dark:text-blue-300">
-                              Los cambios afectarán las nuevas escenas
-                            </p>
-                          </div>
+                    <CardTitle className="text-white text-lg md:text-xl">
+                      <div className="flex flex-col space-y-3">
+                        <div className="flex items-center">
+                          <User className="w-5 h-5 mr-2 text-accent" />
+                          Información del Personaje
                         </div>
-                        <Button
-                          onClick={handleEditCharacter}
-                          variant="outline"
-                          size="sm"
-                          className="border-border text-foreground hover:bg-muted"
-                        >
-                          <Edit className="w-4 h-4 mr-2" />
-                          Editar Personaje
-                        </Button>
+                        <div className="flex flex-col space-y-2 sm:flex-row sm:items-start sm:space-y-0 sm:space-x-3">
+                          <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-2 flex-1 min-w-0 max-w-full">
+                            <div className="flex items-start space-x-2">
+                              <MessageCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                              <p className="text-xs text-blue-700 dark:text-blue-300 break-words overflow-wrap-anywhere">
+                                Los cambios afectarán las nuevas escenas
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            onClick={handleEditCharacter}
+                            variant="outline"
+                            size="sm"
+                            className="border-border text-foreground hover:bg-muted w-full sm:w-auto flex-shrink-0"
+                            data-testid="edit-character-button"
+                          >
+                            <Edit className="w-4 h-4 mr-2" />
+                            <span className="hidden sm:inline">Editar Personaje</span>
+                            <span className="sm:hidden">Editar</span>
+                          </Button>
+                        </div>
                       </div>
                     </CardTitle>
                   </CardHeader>
@@ -307,6 +335,7 @@ function CharacterDashboardContent() {
                     <Button
                       onClick={() => setActiveTab("adventures")}
                       className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+                      data-testid="view-adventures-button"
                     >
                       <Gamepad2 className="w-4 h-4 mr-2" />
                       Ver Aventuras
@@ -363,6 +392,7 @@ function CharacterDashboardContent() {
                           onClick={handleStartStoryChat}
                           className="bg-accent hover:bg-accent/90 text-accent-foreground px-6 py-2 w-full md:w-auto"
                           disabled={loading}
+                          data-tour="new-adventure-button"
                         >
                           <MessageCircle className="w-4 h-4 mr-2" />
                           {loading ? 'Iniciando...' : 'Nueva Aventura'}
@@ -379,7 +409,7 @@ function CharacterDashboardContent() {
               </Card>
 
               {/* Aventuras Existentes */}
-              <Card className="bg-card border-border">
+              <Card className="bg-card border-border" data-tour="session-history">
                 <CardHeader>
                   <CardTitle className="flex items-center text-white">
                     <History className="w-5 h-5 mr-2 text-accent" />

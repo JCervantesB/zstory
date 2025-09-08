@@ -40,7 +40,8 @@ export function useZombieGame(sessionId?: string) {
         sessionId: string,
         order: number,
         characterVisualPrompt?: string, 
-        includeCharacter?: boolean
+        includeCharacter?: boolean,
+        secondaryCharacterId?: string
     ) => {
         try {
             console.log('🎨 Iniciando generación de imagen...');
@@ -78,6 +79,7 @@ export function useZombieGame(sessionId?: string) {
                     sessionId: sessionId,
                     order: order,
                     narrativeText: narrativeText,
+                    secondaryCharacterId: secondaryCharacterId,
                     mediaType: imageData.mediaType || 'image/png'
                 })
             });
@@ -113,9 +115,9 @@ export function useZombieGame(sessionId?: string) {
                 if (message.id === messageId) {
                     return {
                         ...message,
-                        id: uploadResult.scene.id, // Usar el ID de la escena
                         image: uploadResult.imageUrl,
-                        imageLoading: false
+                        imageLoading: false,
+                        sceneId: uploadResult.scene.id
                     };
                 }
                 return message;
@@ -130,7 +132,6 @@ export function useZombieGame(sessionId?: string) {
                     return {
                         ...message,
                         imageLoading: false,
-                        // Opcionalmente, agregar un mensaje de error
                         imageError: error instanceof Error ? error.message : 'Error desconocido'
                     };
                 }
@@ -163,7 +164,8 @@ export function useZombieGame(sessionId?: string) {
                 role: 'assistant' as const,
                 content: scene.narrativeText,
                 image: scene.imageUrl || undefined,
-                imageLoading: false
+                imageLoading: false,
+                sceneId: scene.id
             }));
             
             setMessages(gameMessages);
@@ -255,7 +257,8 @@ export function useZombieGame(sessionId?: string) {
                 id: messageId,
                 role: 'assistant',
                 content: '',
-                imageLoading: true
+                imageLoading: true,
+                sceneId: undefined
             };
 
             setMessages([newMessage]);
@@ -281,7 +284,8 @@ export function useZombieGame(sessionId?: string) {
                         newSession.id,
                         0,
                         storyData.characterVisualPrompt, 
-                        storyData.includeCharacter
+                        storyData.includeCharacter,
+                        storyData.secondaryCharacterId
                     );
                 }
             );
@@ -330,7 +334,8 @@ export function useZombieGame(sessionId?: string) {
                 id: messageId,
                 role: 'assistant',
                 content: '',
-                imageLoading: true
+                imageLoading: true,
+                sceneId: undefined
             };
             
             setMessages(prevMessages => [...prevMessages, assistantMessage]);
@@ -356,7 +361,8 @@ export function useZombieGame(sessionId?: string) {
                         currentGameSession.id,
                         nextOrder,
                         data.characterVisualPrompt,
-                        data.includeCharacter
+                        data.includeCharacter,
+                        data.secondaryCharacterId
                     );
                     
                     // Actualizar el orden de escenas
@@ -428,17 +434,101 @@ export function useZombieGame(sessionId?: string) {
         }
     }, [session?.user?.id]);
 
+    const deleteScene = useCallback(async (sceneId: string) => {
+        if (!currentGameSession) return false;
+        
+        try {
+            const response = await fetch(`/api/game-sessions/${currentGameSession.id}/scenes/${sceneId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al eliminar escena');
+            }
+
+            const data = await response.json();
+            
+            // Recargar la sesión para obtener las escenas actualizadas
+            await loadExistingSession(currentGameSession.id);
+            
+            return true;
+        } catch (error) {
+            console.error('Error al eliminar escena:', error);
+            return false;
+        }
+    }, [currentGameSession, loadExistingSession]);
+
+    const regenerateScene = useCallback(async (sceneId: string) => {
+        if (!currentGameSession) return false;
+        
+        setIsLoading(true);
+        try {
+            // Encontrar el mensaje correspondiente a la escena
+            const messageIndex = messages.findIndex(msg => 
+                msg.role === 'assistant' && msg.sceneId === sceneId
+            );
+            
+            if (messageIndex === -1) {
+                throw new Error('No se encontró el mensaje correspondiente a la escena');
+            }
+
+            // Obtener el mensaje del usuario anterior (el prompt original)
+            const userMessageIndex = messageIndex - 1;
+            const userMessage = userMessageIndex >= 0 ? messages[userMessageIndex].content : '';
+            
+            const response = await fetch(`/api/game-sessions/${currentGameSession.id}/scenes/${sceneId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userMessage: userMessage
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al regenerar escena');
+            }
+
+            const data = await response.json();
+            
+            // Actualizar el mensaje con el nuevo contenido
+            setMessages(prevMessages => 
+                prevMessages.map(msg => 
+                    msg.sceneId === sceneId 
+                        ? { 
+                            ...msg, 
+                            content: data.storyData.narrative,
+                            image: data.scene.imageUrl,
+                            imageLoading: false
+                        }
+                        : msg
+                )
+            );
+            
+            return true;
+        } catch (error) {
+            console.error('Error al regenerar escena:', error);
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    }, [currentGameSession, messages]);
+
     return {
         messages,
         input,
         isLoading,
         currentGameSession,
+        setCurrentGameSession,
         startGame: startNewGame,
         handleSubmit,
         setInput,
         handleInputChange,
         completeSession,
         loadExistingSession,
-        getUserSessions
+        getUserSessions,
+        deleteScene,
+        regenerateScene
     };
 }

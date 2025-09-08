@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { uploadSceneToCloudinary } from '@/lib/cloudinary';
-import { gameSceneQueries } from '@/db/queries';
+import { gameQueries, gameSceneQueries } from '@/db/queries';
 import { generateId } from '@/lib/utils';
 
 export async function POST(request: NextRequest) {
@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       sessionId, 
       order, 
       narrativeText,
+      secondaryCharacterId,
       mediaType = 'image/png'
     } = body;
 
@@ -42,15 +43,13 @@ export async function POST(request: NextRequest) {
       order
     );
 
-    // Guardar escena en la base de datos
-    const newScene = await gameSceneQueries.create({
-      id: generateId(),
-      sessionId: sessionId,
-      order: order,
-      narrativeText: narrativeText,
-      imageUrl: cloudinaryResult.secure_url,
-      createdAt: new Date().toISOString()
-    });
+    // Guardar escena en la base de datos usando gameQueries.addScene
+    const newScene = await gameQueries.addScene(
+      sessionId,
+      narrativeText,
+      cloudinaryResult.secure_url,
+      secondaryCharacterId
+    );
 
     return NextResponse.json({
       success: true,

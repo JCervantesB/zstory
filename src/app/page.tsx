@@ -47,7 +47,7 @@ function HomePage() {
       {/* Hero Section */}
       <main className="container mx-auto px-6 py-12">
         <div className="text-center mb-16">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 text-red-500 pixel-text animate-pulse">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-bold mb-6 text-red-500 pixel-text animate-pulse leading-tight px-2 break-words">
             PIXEL APOCALYPSE
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-300">
@@ -156,10 +156,10 @@ function HomePage() {
 
         {/* CTA Section */}
         <div className="text-center bg-gray-900 border-4 border-red-500 p-12 rounded-lg">
-          <h2 className="text-4xl font-bold mb-6 text-red-500 pixel-text">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-6 text-red-500 pixel-text leading-tight px-2 break-words">
             ¡COMIENZA TU SUPERVIVENCIA!
           </h2>
-          <p className="text-xl mb-8 text-gray-300">
+          <p className="text-left sm:text-center text-xl mb-8 text-gray-300">
             Crea tu personaje y sumérgete en una aventura apocalíptica única
           </p>
           <Link 

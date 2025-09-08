@@ -1,43 +1,43 @@
 export const GAME_PROMPTS = {
   INITIAL_STORY: (characterInfo?: {
-  name: string;
-  lastName: string;
-  description: string;
-  specialty: string;
-  visualPrompt: string;
-  originLocation?: string;
-  currentLocation?: string;
-}) => {
-  let characterContext = "";
-  if (characterInfo?.name) {
-    const fullName = characterInfo.lastName
-      ? `${characterInfo.name} ${characterInfo.lastName}`
-      : characterInfo.name;
-    const desc = characterInfo.description ? `Descripción: ${characterInfo.description}.` : "";
-    const specialty = characterInfo.specialty ? `Especialidad: ${characterInfo.specialty}.` : "";
-    const visual = characterInfo.visualPrompt ? `Apariencia: ${characterInfo.visualPrompt}.` : "";
-    const origin = characterInfo.originLocation ? `Lugar de procedencia: ${characterInfo.originLocation}.` : "";
-    const current = characterInfo.currentLocation ? `Ubicación actual: ${characterInfo.currentLocation}.` : "";
+    name: string;
+    lastName: string;
+    description: string;
+    specialty: string;
+    visualPrompt: string;
+    originLocation?: string;
+    currentLocation?: string;
+  }) => {
+    let characterContext = "";
+    if (characterInfo?.name) {
+      const fullName = characterInfo.lastName
+        ? `${characterInfo.name} ${characterInfo.lastName}`
+        : characterInfo.name;
+      const desc = characterInfo.description ? `Descripción: ${characterInfo.description}.` : "";
+      const specialty = characterInfo.specialty ? `Especialidad: ${characterInfo.specialty}.` : "";
+      const visual = characterInfo.visualPrompt ? `Apariencia: ${characterInfo.visualPrompt}.` : "";
+      const origin = characterInfo.originLocation ? `Lugar de procedencia: ${characterInfo.originLocation}.` : "";
+      const current = characterInfo.currentLocation ? `Ubicación actual: ${characterInfo.currentLocation}.` : "";
 
-    characterContext = `\n\nNOTA SOBRE TU PERSONAJE (USAR SOLO PARA INFLUIR EN EL ENTORNO):\n- Nombre: ${fullName}\n- ${desc} ${specialty} ${visual} ${origin} ${current}\n\nINSTRUCCIONES CLAVE: Usa los rasgos, objetos, ubicaciones y la reputación de tu personaje **solo** para modelar el mundo (carteles, notas, rumores, objetos encontrados, reacciones de NPCs, referencias geográficas). **No describas tu apariencia ni te muestres físicamente** en la escena inicial. Si tienes ubicación actual, considera usarla como punto de partida o referencia para la historia.`;
-  }
+      characterContext = `\n\nNOTA SOBRE TU PERSONAJE (USAR SOLO PARA INFLUIR EN EL ENTORNO):\n- Nombre: ${fullName}\n- ${desc} ${specialty} ${visual} ${origin} ${current}\n\nINSTRUCCIONES CLAVE: Usa rasgos, objetos, ubicaciones y reputación del personaje SOLO para modelar el mundo (carteles, pistas, rumores, objetos con nombres). **No muestres ni describas físicamente al protagonista en esta escena inicial.**`;
+    }
 
-  return `Eres el narrador de un juego de aventura conversacional de supervivencia zombie en estilo pixel art.${characterContext}
+    return `Eres el narrador de un juego de aventura conversacional de supervivencia zombie en estilo pixel art.${characterContext}
 
-Genera la ESCENA INICIAL dirigida al jugador en SEGUNDA PERSONA (tú), pero **sin describir ni mostrar físicamente al protagonista**. La escena debe:
-- Nombrar un lugar/ciudad específico y reconocible (elige y nómbralo claramente).
-- Describir el entorno completo (calles, edificios, clima, sonidos, olores) y las amenazas inmediatas.
-- Introducir un gancho narrativo potente (misterio, cuenta regresiva, descubrimiento inquietante o conflicto humano) que te enganche desde el primer momento.
-- Hacer que la información sobre tu personaje afecte el mundo indirectamente: objetos con tu nombre, rumores sobre tu profesión, notas que mencionen tu historia, o NPCs que reaccionen a tu reputación.
+Genera la ESCENA INICIAL en SEGUNDA PERSONA (tú). La escena debe:
+- Basarse en la ubicación: si existe characterInfo.currentLocation, usa esa ubicación como origen y descríbela detalladamente (calles, edificios, clima, sonidos, olores, atmósfera). Si no existe, elige y nombra una ciudad/ubicación creíble.
+- Ser inmersiva: mostrar amenazas inmediatas, objetos, NPCs y un gancho narrativo potente (misterio, conflicto, cuenta regresiva).
+- Usar la información del personaje solo indirectamente (pistas, notas, objetos, rumores).
 
 Formato y restricciones:
-- Escribe en SEGUNDA PERSONA (usa "tú", "te", "tu") y no en tercera persona.
-- MÁXIMO 2 párrafos cortos (cada párrafo 4–6 frases). Sé inmersivo y directo.
-- Evita centrar la acción en describir tu cuerpo o apariencia; céntrate en el escenario, NPCs y amenazas.
-- Termina SIEMPRE con una pregunta directa: "¿Qué decides hacer?", "¿Hacia dónde te diriges?" o "¿Cómo reaccionas?".
+- Máximo 2 párrafos cortos.
+- Segunda persona. No describir el cuerpo ni mostrar físicamente al protagonista.
+- Termina con UNA pregunta directa invitando a decidir: "¿Qué decides hacer?", "¿Hacia dónde te diriges?" o similar.
 
-IMPORTANTE: Al final incluye una línea separada que comience EXACTAMENTE con "IMAGEN: " seguida de una descripción breve en INGLÉS para generar una imagen pixel art de la escena inicial (máximo 50 palabras). Esta línea es OBLIGATORIA.`;
-},
+IMPORTANTE: Al final añade una línea separada que comience EXACTAMENTE con \`IMAGEN: \` seguida de una descripción breve en INGLÉS (máx. 200 palabras) para generar una imagen pixel art fiel al lugar. Evita palabras relacionadas con gore/sangre; si son necesarias sustituir por "green liquid" o "pixels".
+Instead of: A grotesque scene with mutilated bodies and blood everywhere.
+For example, use: A scene with pixelated figures representing bodies and green liquid stains everywhere.`;
+  },
 
   CONTINUE_STORY: (
     historyText: string,
@@ -69,7 +69,7 @@ IMPORTANTE: Al final incluye una línea separada que comience EXACTAMENTE con "I
       const origin = characterInfo.originLocation ? `Lugar de procedencia: ${characterInfo.originLocation}.` : "";
       const current = characterInfo.currentLocation ? `Ubicación actual: ${characterInfo.currentLocation}.` : "";
 
-      characterContext = `\n\nNOTA SOBRE EL PROTAGONISTA:\n- Nombre: ${fullName}\n- ${desc} ${specialty} ${visual} ${origin} ${current}\n\nINSTRUCCIONES CLAVE: Mantén la coherencia del protagonista. Usa su nombre sólo cuando sea relevante para la escena. Menciona su apariencia únicamente en escenas donde el protagonista sea mostrado. Haz que sus objetos, especialidad y ubicaciones influyan en las opciones y resultados. Considera las referencias geográficas para enriquecer la narrativa.`;
+      characterContext = `\n\nNOTA SOBRE EL PROTAGONISTA:\n- Nombre: ${fullName}\n- ${desc} ${specialty} ${visual} ${origin} ${current}\n\nINSTRUCCIONES CLAVE: A partir de ahora muestra coherentemente al protagonista cuando la escena lo requiera; su apariencia ${visual}, posición y acciones deben influir en la imagen y en las opciones. Usa su nombre solo si aporta claridad.`;
     }
 
     let secondaryContext = "";
@@ -80,52 +80,59 @@ IMPORTANTE: Al final incluye una línea separada que comience EXACTAMENTE con "I
       const secDesc = secondaryCharacter.description ? `Descripción: ${secondaryCharacter.description}.` : "";
       const secVisual = secondaryCharacter.visualPrompt ? `Apariencia: ${secondaryCharacter.visualPrompt}.` : "";
 
-      secondaryContext = `\n\nNOTA SOBRE EL SECUNDARIO:\n- Nombre: ${secFullName}\n- ${secDesc} ${secVisual}\n\nINSTRUCCIONES: Este personaje debe ser mencionado por su nombre, ya sea directamente (si está vivo puede hablar y decirlo, si está muerto puede llevar identificación, una nota firmada, un objeto marcado con su nombre, etc.). No lo conviertas en recurrente: es una aparición momentánea cuyo estado afecta la escena. Evita que quede como un personaje anónimo.`;
+      secondaryContext = `\n\nNOTA SOBRE EL SECUNDARIO:\n- Nombre: ${secFullName}\n- ${secDesc} ${secVisual}\n\nINSTRUCCIONES: Menciona a este personaje por su nombre en la escena (si está vivo, habla o se presenta; si está muerto, indicativo en identificación, nota o marca en un objeto). No lo dejes anónimo.`;
     }
 
-    return `Eres el narrador de un juego de aventura conversacional de supervivencia zombie en estilo pixel art.${characterContext}\n\nHistoria de la conversación:\n${historyText}\n\nEl jugador acaba de decir: "${userMessage}"\n\n${secondaryContext}\n\nContinúa la historia basándote en la escena del juego. Describe las consecuencias de manera dramática e inmersiva en MÁXIMO 2 párrafos cortos (máx. 4–6 frases por párrafo). Sé conciso y directo. Presenta la nueva situación y termina SIEMPRE invitando al jugador a participar activamente con una pregunta directa: "¿Qué decides hacer?", "¿Hacia dónde te diriges?" o "¿Cómo reaccionas?".\n\nIMPORTANTE: Al final, SIEMPRE incluye una línea separada que comience EXACTAMENTE con "IMAGEN:" seguida de una descripción breve en inglés para generar una imagen pixel art de la escena actual (máximo 50 palabras). Esta línea es OBLIGATORIA.`;
+    /*
+      Mejora clave: introducir "respiros" ocasionales.
+      - Cuando la escena sea muy tensa o el jugador esté presionado, el narrador debe, en aproximadamente 1 de cada 3 continuaciones,
+        insertar UN BREVE RESPIRO: una oración corta que alivie la tensión (ej.: sonido lejano, recuerdo breve, pequeño instante de calma, olor familiar).
+      - El respiro debe ser breve (1 oración), evocador y en segunda persona, y luego reanudar la narrativa.
+      - Esto busca mantener la inmersión pero reducir la sensación de acoso continuo.
+    */
+
+    return `Eres el narrador de un juego de aventura conversacional de supervivencia zombie en estilo pixel art.${characterContext}
+
+Historia previa:
+${historyText}
+
+Última acción del jugador: "${userMessage}"${secondaryContext}
+
+Continúa la historia describiendo las consecuencias inmediatas y la nueva situación. Sé dramático e inmersivo, en MÁXIMO 2 párrafos cortos (4–6 frases por párrafo). Ahora SÍ puedes mostrar y describir al protagonista en la escena (posición, gesto, ropa, arma u objeto relevante). Incluye opciones implícitas y termina con una pregunta directa para el jugador.
+
+RESPIRADERO: Si la escena es intensa o el jugador parece presionado, en aproximadamente 1 de cada 5 respuestas inserta ANTES del segundo párrafo un único "respiro" (1 oración) en segunda persona que alivie momentáneamente la tensión — por ejemplo, un sonido distante que te recuerda a casa, una brisa fría que corta la adrenalina, o una breve memoria de algo cotidiano. Este respiro debe ser corto y poético, no resolver la tensión.
+
+IMAGEN: Al final añade una línea separada que comience EXACTAMENTE con \`IMAGEN: \` seguida de una breve descripción EN INGLÉS para generar una imagen pixel art de la escena actual (máx. 200 palabras). La descripción debe:
+- Ser fiel al personaje ${characterInfo?.visualPrompt} y al escenario (si el protagonista aparece, indícalo: pose, vestimenta, ángulo).
+- Evitar términos gore/sangre; reemplaza referencias a sangre por "green liquid" y gore por "pixels" si aparecen.
+- Ser lista para alimentar un generador de pixel art (pose, ambiente, aspecto general).`;
   },
 
-  // GENERATE_IMAGE ahora sanitiza referencias a sangre/gore y las sustituye por "green liquid".
+  // GENERATE_IMAGE saneador: recibe descripción libre y devuelve prompt en inglés listo para modelo de imágenes
   GENERATE_IMAGE: (description: string, characterVisualPrompt?: string, includeCharacter?: boolean) => {
-  // Términos en inglés relacionados con sangre
-  const bloodEng = /\b(blood|bloodstain|bloody|bleeding|bleed|hemorrhage|hemorrhaging)\b/gi;
-  // Términos en español relacionados con sangre
-  const bloodEs = /\b(sangre|sangrado|sangrando|sangrante|hemorragia|hemorrágico|hemorrágica)\b/gi;
+    // Patrones para sanitizar términos de sangre/gore (inglés y español)
+    const bloodEng = /\b(blood|bloodstain|bloody|bleeding|bleed|hemorrhage|hemorrhaging)\b/gi;
+    const bloodEs = /\b(sangre|sangrado|sangrando|sangrante|hemorragia|hemorrágico|hemorrágica)\b/gi;
+    const goreEng = /\b(gore|gory|gorey|guts|entrails|viscera|tripes|disembowel|mutilat)\b/gi;
+    const goreEs = /\b(gore|górico|górica|víscera|vísceras|tripas|entrañas|desmembr|mutilad|mutilación|mutilacion)\b/gi;
 
-  // Términos en inglés relacionados con gore
-  const goreEng = /\b(gore|gory|gorey|guts|entrails|viscera)\b/gi;
-  // Términos en español relacionados con gore
-  const goreEs = /\b(gore|górico|górica|víscera|vísceras|viscera|tripas|entrañas|desmembr|mutilad|mutilación|mutilacion)\b/gi;
+    const sanitize = (text = '') =>
+      text
+        .replace(bloodEng, 'green liquid')
+        .replace(bloodEs, 'green liquid')
+        .replace(goreEng, 'pixels')
+        .replace(goreEs, 'pixels');
 
-  // Reemplazos (mantenemos ambas variantes idioma-compatibles)
-  const replaceBloodEng = 'green liquid';
-  const replaceBloodEs = 'líquido verde';
-  const replaceGoreEng = 'pixels';
-  const replaceGoreEs = 'pixeles';
+    const safeDescription = sanitize(description || '');
+    const safeCharacter = sanitize(characterVisualPrompt || '');
 
-  const sanitize = (text = '') => {
-    return text
-      .replace(bloodEng, replaceBloodEng)
-      .replace(bloodEs, replaceBloodEs)
-      .replace(goreEng, replaceGoreEng)
-      .replace(goreEs, replaceGoreEs);
-  };
+    // Construir prompt en inglés conciso, listo para generador pixel art
+    let prompt = `16:9 pixel art scene: ${safeDescription.trim()}.`;
+    if (includeCharacter && safeCharacter) {
+      prompt += ` Character: ${safeCharacter.trim()}.`;
+    }
+    prompt += ` 8-bit retro palette, clear silhouette, readable shapes, low-res blocky pixels. No realistic gore — use "green liquid" or "pixels" instead of blood/gore. Keep description short and specific (<=200 words).`;
 
-  const safeDescription = sanitize(description);
-  const safeCharacter = sanitize(characterVisualPrompt);
-
-  let prompt = `Generate a pixel art style image in 16:9 aspect ratio: ${safeDescription}.`;
-
-  if (includeCharacter && safeCharacter) {
-    prompt += ` Character appearance: ${safeCharacter}.`;
-  }
-
-  prompt += ` Use 8-bit retro gaming aesthetic with limited color palette, blocky pixelated style, and clear definition. The image should be in landscape format (16:9 aspect ratio).`;
-
-  // Nota explícita para el generador (por si interpreta mejor inglés):
-  prompt += ` Note: Replace any references to blood with "green liquid" or "líquido verde" and any gore with "pixels" or "pixeles" in the artwork.`;
-
-  return prompt;
-},
+    return prompt;
+  },
 };

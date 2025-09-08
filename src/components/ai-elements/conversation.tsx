@@ -11,7 +11,7 @@ export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
 export const Conversation = ({ className, ...props }: ConversationProps) => (
   <StickToBottom
-    className={cn('relative flex-1', className)}
+    className={cn('relative flex-1 scrollbar-hide', className)}
     initial="smooth"
     resize="smooth"
     role="log"
@@ -27,7 +27,7 @@ export const ConversationContent = ({
   className,
   ...props
 }: ConversationContentProps) => (
-  <StickToBottom.Content className={cn('p-4', className)} {...props} />
+  <StickToBottom.Content className={cn('p-4 scrollbar-hide', className)} {...props} />
 );
 
 export type ConversationScrollButtonProps = ComponentProps<typeof Button>;
@@ -38,25 +38,28 @@ export const ConversationScrollButton = ({
 }: ConversationScrollButtonProps) => {
   const { isAtBottom, scrollToBottom } = useStickToBottomContext();
 
-  const handleScrollToBottom = useCallback(() => {
+  const handleScrollClick = useCallback(() => {
     scrollToBottom();
   }, [scrollToBottom]);
 
+  // Solo mostrar el botón si no estamos en la parte inferior
+  if (isAtBottom) {
+    return null;
+  }
+
   return (
-    !isAtBottom && (
-      <Button
-        className={cn(
-          'absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full',
-          className
-        )}
-        onClick={handleScrollToBottom}
-        size="icon"
-        type="button"
-        variant="outline"
-        {...props}
-      >
-        <ArrowDownIcon className="size-4" />
-      </Button>
-    )
+    <Button
+      className={cn(
+        "fixed top-32 right-4 rounded-full z-50 shadow-lg",
+        className
+      )}
+      onClick={handleScrollClick}
+      size="icon"
+      type="button"
+      variant="outline"
+      {...props}
+    >
+      <ArrowDownIcon className="size-4" />
+    </Button>
   );
 };

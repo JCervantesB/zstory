@@ -215,38 +215,40 @@ export function EditCharacterModal({ isOpen, onClose, user, onSave }: EditCharac
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto bg-gray-900 border-gray-700 scrollbar-hide">
-        <DialogHeader>
-          <DialogTitle className="text-red-500 text-xl font-bold">
+      <DialogContent className="w-full max-w-[calc(100%-1rem)] sm:max-w-[900px] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto bg-gray-900 border-gray-700 scrollbar-hide mx-2 sm:mx-auto">
+        <DialogHeader className="space-y-2 sm:space-y-3">
+          <DialogTitle className="text-red-500 text-lg sm:text-xl font-bold text-center sm:text-left">
             🧟‍♂️ Editar Personaje
           </DialogTitle>
-          <DialogDescription className="text-gray-400">
+          <DialogDescription className="text-gray-400 text-sm text-center sm:text-left">
             Modifica la información de tu superviviente y personaliza su equipamiento.
           </DialogDescription>
         </DialogHeader>
 
         {/* Step Navigation */}
-        <div className="flex justify-center mb-6">
-          <div className="flex bg-gray-800 border border-gray-600 rounded-lg p-1">
+        <div className="flex justify-center mb-4 sm:mb-6">
+          <div className="flex bg-gray-800 border border-gray-600 rounded-lg p-1 w-full sm:w-auto">
             <button
               onClick={() => setCurrentStep(1)}
-              className={`px-4 py-2 rounded-md font-bold transition-colors text-sm ${
+              className={`flex-1 sm:flex-none px-2 sm:px-4 py-2 rounded-md font-bold transition-colors text-xs sm:text-sm ${
                 currentStep === 1
                   ? 'bg-green-400 text-black'
                   : 'text-green-400 hover:bg-gray-700'
               }`}
             >
-              📝 Información Básica
+              <span className="hidden sm:inline">📝 Información Básica</span>
+              <span className="sm:hidden">📝 Info</span>
             </button>
             <button
               onClick={() => setCurrentStep(2)}
-              className={`px-4 py-2 rounded-md font-bold transition-colors text-sm ${
+              className={`flex-1 sm:flex-none px-2 sm:px-4 py-2 rounded-md font-bold transition-colors text-xs sm:text-sm ${
                 currentStep === 2
                   ? 'bg-blue-400 text-black'
                   : 'text-blue-400 hover:bg-gray-700'
               }`}
             >
-              🎨 Personalización
+              <span className="hidden sm:inline">🎨 Personalización</span>
+              <span className="sm:hidden">🎨 Custom</span>
             </button>
           </div>
         </div>
@@ -286,29 +288,29 @@ export function EditCharacterModal({ isOpen, onClose, user, onSave }: EditCharac
               </div>
 
               {/* Form Fields */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="characterName" className="text-gray-300">
+                  <Label htmlFor="characterName" className="text-gray-300 text-sm">
                     Nombre *
                   </Label>
                   <Input
                     id="characterName"
                     value={formData.characterName}
                     onChange={(e) => handleInputChange('characterName', e.target.value)}
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="bg-gray-800 border-gray-600 text-white text-sm"
                     placeholder="Nombre del personaje"
                     maxLength={20}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="characterLastName" className="text-gray-300">
+                  <Label htmlFor="characterLastName" className="text-gray-300 text-sm">
                     Apellido
                   </Label>
                   <Input
                     id="characterLastName"
                     value={formData.characterLastName}
                     onChange={(e) => handleInputChange('characterLastName', e.target.value)}
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="bg-gray-800 border-gray-600 text-white text-sm"
                     placeholder="Apellido del personaje"
                     maxLength={20}
                   />
@@ -316,14 +318,14 @@ export function EditCharacterModal({ isOpen, onClose, user, onSave }: EditCharac
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="characterDescription" className="text-gray-300">
+                <Label htmlFor="characterDescription" className="text-gray-300 text-sm">
                   Descripción del Personaje
                 </Label>
                 <Textarea
                   id="characterDescription"
                   value={formData.characterDescription}
                   onChange={(e) => handleInputChange('characterDescription', e.target.value)}
-                  className="bg-gray-800 border-gray-600 text-white min-h-[80px] resize-none"
+                  className="bg-gray-800 border-gray-600 text-white min-h-[60px] sm:min-h-[80px] resize-none text-sm"
                   placeholder="Ej: Hombre de 35 años, barba, cicatriz en la mejilla, ojos verdes..."
                   maxLength={200}
                 />
@@ -332,49 +334,44 @@ export function EditCharacterModal({ isOpen, onClose, user, onSave }: EditCharac
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="characterOriginLocation" className="text-gray-300">
+                  <Label htmlFor="characterOriginLocation" className="text-gray-300 text-sm">
                     Lugar de Procedencia
                   </Label>
                   <Input
                     id="characterOriginLocation"
                     value={formData.characterOriginLocation}
                     onChange={(e) => handleInputChange('characterOriginLocation', e.target.value)}
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="bg-gray-800 border-gray-600 text-white text-sm"
                     placeholder="Ej: Madrid, España"
                     maxLength={50}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="characterCurrentLocation" className="text-gray-300">
+                  <Label htmlFor="characterCurrentLocation" className="text-gray-300 text-sm">
                     Ubicación Actual
                   </Label>
                   <Input
                     id="characterCurrentLocation"
                     value={formData.characterCurrentLocation}
                     onChange={(e) => handleInputChange('characterCurrentLocation', e.target.value)}
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="bg-gray-800 border-gray-600 text-white text-sm"
                     placeholder="Ej: Barcelona, España"
                     maxLength={50}
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="characterVisualPrompt" className="text-gray-300">
-                  Prompt para generar avatar (opcional)
-                </Label>
+              {/* Campo de prompt de avatar oculto - se genera automáticamente pero necesario para guardar en BD */}
+              <div className="hidden">
                 <Textarea
                   id="characterVisualPrompt"
                   value={formData.characterVisualPrompt}
                   readOnly
-                  className="bg-gray-700 border-gray-600 text-gray-300 min-h-[80px] resize-none cursor-not-allowed"
+                  className="bg-gray-700 border-gray-600 text-gray-300 min-h-[60px] sm:min-h-[80px] resize-none cursor-not-allowed text-sm"
                   placeholder="Este prompt se genera automáticamente basado en la descripción, especialidad, vestimenta e ítems seleccionados..."
                 />
-                <div className="text-xs text-gray-500">
-                  Generado automáticamente • {formData.characterVisualPrompt.length} caracteres
-                </div>
               </div>
 
               {/* Specialties */}
@@ -497,33 +494,35 @@ export function EditCharacterModal({ isOpen, onClose, user, onSave }: EditCharac
           )}
         </div>
 
-        <DialogFooter className="flex justify-between">
-          <div className="flex gap-2">
+        <DialogFooter className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0">
+          <div className="flex flex-col sm:flex-row gap-2 order-2 sm:order-1">
             <Button
               onClick={() => setCurrentStep(1)}
               disabled={currentStep === 1}
               variant="outline"
-              className={`border-gray-600 text-gray-300 hover:bg-gray-700 ${
+              className={`border-gray-600 text-gray-300 hover:bg-gray-700 text-sm px-3 py-2 ${
                 currentStep === 1 ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
-              Anterior
+              <span className="hidden sm:inline">Anterior</span>
+              <span className="sm:hidden">Atrás</span>
             </Button>
             
             {currentStep === 1 ? (
               <Button
                 onClick={() => setCurrentStep(2)}
-                className="bg-blue-500 hover:bg-blue-600 text-white"
+                className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-2"
               >
-                Siguiente
+                <span className="hidden sm:inline">Siguiente</span>
+                <span className="sm:hidden">Continuar</span>
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             ) : (
               <Button
                 variant="outline"
                 onClick={onClose}
-                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                className="border-gray-600 text-gray-300 hover:bg-gray-700 text-sm px-3 py-2"
               >
                 Cancelar
               </Button>
@@ -534,7 +533,7 @@ export function EditCharacterModal({ isOpen, onClose, user, onSave }: EditCharac
             <Button
               onClick={handleSave}
               disabled={isSaving || !formData.characterName.trim() || !formData.characterSpecialty}
-              className={`bg-red-600 hover:bg-red-700 text-white ${
+              className={`bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-2 order-1 sm:order-2 ${
                 isSaving || !formData.characterName.trim() || !formData.characterSpecialty
                   ? 'opacity-50 cursor-not-allowed'
                   : ''
@@ -543,10 +542,14 @@ export function EditCharacterModal({ isOpen, onClose, user, onSave }: EditCharac
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Guardando...
+                  <span className="hidden sm:inline">Guardando...</span>
+                  <span className="sm:hidden">Guardando</span>
                 </>
               ) : (
-                '💾 Guardar Cambios'
+                <>
+                  <span className="hidden sm:inline">💾 Guardar Cambios</span>
+                  <span className="sm:hidden">💾 Guardar</span>
+                </>
               )}
             </Button>
           )}

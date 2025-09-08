@@ -4,10 +4,40 @@ import { Image as AIImage } from "./ai-elements/image";
 import { Response } from "./ai-elements/response";
 import { Loader } from "./ai-elements/loader";
 import { UI_MESSAGES } from "@/lib/consts";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import { toast } from "sonner";
 
-export function GameMessage({ message }: { message: GameMessageType }) {
-    const { role, content, image, imageLoading, imageError } = message;
+interface GameMessageProps {
+    message: GameMessageType;
+    onDeleteScene?: (sceneId: string) => Promise<boolean>;
+}
+
+export function GameMessage({ message, onDeleteScene }: GameMessageProps) {
+    const { role, content, image, imageLoading, imageError, sceneId } = message;
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = async () => {
+        if (!sceneId || !onDeleteScene) return;
+        
+        setIsDeleting(true);
+        try {
+            const success = await onDeleteScene(sceneId);
+            if (success) {
+                toast.success('Escena eliminada correctamente');
+            } else {
+                toast.error('Error al eliminar la escena');
+            }
+        } catch {
+            toast.error('Error al eliminar la escena');
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+
 
     return (
         <Message from={role}>
@@ -60,6 +90,33 @@ export function GameMessage({ message }: { message: GameMessageType }) {
                 <Response>
                     {content}
                 </Response>
+                {role === 'assistant' && sceneId && onDeleteScene && (
+                    <div className="flex gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {/* Botón de regenerar temporalmente oculto - falta contexto para regeneración */}
+                        {/* {onRegenerateScene && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleRegenerate}
+                                disabled={isRegenerating || isDeleting}
+                                className="text-xs"
+                            >
+                                <RotateCcw className="w-3 h-3 mr-1" />
+                                {isRegenerating ? 'Regenerando...' : 'Regenerar'}
+                            </Button>
+                        )} */}
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                            <Trash2 className="w-3 h-3 mr-1" />
+                            {isDeleting ? 'Eliminando...' : 'Eliminar'}
+                        </Button>
+                    </div>
+                )}
             </MessageContent>
         </Message>
     )

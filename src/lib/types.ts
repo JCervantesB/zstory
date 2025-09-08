@@ -3,8 +3,10 @@ export interface GameMessage {
     role: 'user' | 'assistant';
     content: string;
     image?: GeneratedImage | string; // Can be GeneratedImage object or URL string
+    imageUrl?: string; // URL of the uploaded image
     imageLoading?: boolean;
     imageError?: string; // Error message if image generation fails
+    sceneId?: string; // ID of the associated scene for assistant messages
 }
 
 export interface GeneratedImage {
@@ -35,4 +37,5 @@ export interface GenerateStoryResponse {
     imagePrompt: string;
     characterVisualPrompt?: string;
     includeCharacter?: boolean;
+    secondaryCharacterId?: string;
 }

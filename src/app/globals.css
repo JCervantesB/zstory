@@ -147,6 +147,16 @@ p + p {
   display: none;
 }
 
+/* Hide scrollbar globally */
+html, body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
+}
+
 /* Pixel Art Styles for Zombie Theme */
 .pixel-text {
   font-family: 'Courier New', monospace;
@@ -215,4 +225,28 @@ p + p {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Hide scrollbar for all elements with overflow */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure specific elements don't show scrollbars */
+div[style*="overflow"],
+div[style*="overflow-y"],
+div[style*="overflow-x"] {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+div[style*="overflow"]::-webkit-scrollbar,
+div[style*="overflow-y"]::-webkit-scrollbar,
+div[style*="overflow-x"]::-webkit-scrollbar {
+  display: none !important;
 }

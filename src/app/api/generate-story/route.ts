@@ -5,8 +5,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { db } from '@/db';
-import { users } from '@/db/schema';
-import { eq, ne, sql } from 'drizzle-orm';
+import { gameScenes, users, gameSessions } from '@/db/schema';
+import { eq, desc, sql } from 'drizzle-orm';
 
 import { GAME_PROMPTS } from '@/lib/prompts';
 import { GAME_CONFIG } from '@/lib/consts';
@@ -71,44 +71,106 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    // Randomly include a secondary character (10% chance)
-    const shouldIncludeSecondary = Math.random() < 0.20;
+    // Smart secondary character inclusion system
     let secondaryCharacter: {
+      id: string;
       name: string;
       lastName: string;
       description: string;
       visualPrompt: string;
     } | undefined = undefined;
 
-    if (shouldIncludeSecondary && !isStart) {
+    if (!isStart) {
       try {
-        // Get a random character from another player
-        const [randomUser] = await db.select({
-          characterName: users.characterName,
-          characterLastName: users.characterLastName,
-          characterDescription: users.characterDescription,
-          characterVisualPrompt: users.characterVisualPrompt,
+        // Get current user's active session
+        const userSessions = await db
+          .select()
+          .from(gameSessions)
+          .where(eq(gameSessions.userId, session.user.id))
+          .orderBy(desc(gameSessions.lastActive))
+          .limit(1);
+        
+        if (userSessions.length === 0) {
+          return NextResponse.json(
+            { error: 'No se encontró una sesión activa' },
+            { status: 404 }
+          );
+        }
+        
+        const currentSession = userSessions[0];
+        
+        // Get current session scenes to analyze secondary character frequency
+        const sessionScenes = await db.select({
+          secondaryCharacterId: gameScenes.secondaryCharacterId,
         })
-        .from(users)
-        .where(
-          ne(users.id, session.user.id) // Exclude current user
-        )
-        .orderBy(sql`RANDOM()`)
-        .limit(1);
+        .from(gameScenes)
+        .where(eq(gameScenes.sessionId, currentSession.id));
 
-        if (randomUser && randomUser.characterName) {
-          // Clean the visual prompt for the secondary character
-          let cleanSecondaryVisualPrompt = randomUser.characterVisualPrompt || '';
-          if (cleanSecondaryVisualPrompt.startsWith('Generate a pixel art style character avatar image with the following description:')) {
-            cleanSecondaryVisualPrompt = cleanSecondaryVisualPrompt.replace('Generate a pixel art style character avatar image with the following description:', '').trim();
+        const totalScenes = sessionScenes.length;
+        const scenesWithSecondaryCharacters = sessionScenes.filter(scene => scene.secondaryCharacterId).length;
+        
+        // Calculate dynamic probability based on session progress and current frequency
+        let baseChance = 0.15; // Base 15% chance
+        
+        // Reduce chance if secondary characters appeared recently
+        if (totalScenes > 0) {
+          const currentFrequency = scenesWithSecondaryCharacters / totalScenes;
+          const targetFrequency = 0.2; // Target 20% overall frequency
+          
+          // If we're above target frequency, reduce chance significantly
+          if (currentFrequency > targetFrequency) {
+            baseChance = Math.max(0.05, baseChance * (targetFrequency / currentFrequency));
           }
+          // If we're below target and have enough scenes, increase chance
+          else if (totalScenes >= 3 && currentFrequency < targetFrequency * 0.5) {
+            baseChance = Math.min(0.35, baseChance * 1.5);
+          }
+        }
+        
+        // Additional cooldown: check if a secondary character appeared in the last 2 scenes
+        const recentScenes = sessionScenes.slice(-2);
+        const hasRecentSecondaryCharacter = recentScenes.some(scene => scene.secondaryCharacterId);
+        
+        if (hasRecentSecondaryCharacter) {
+          baseChance *= 0.3; // Reduce chance by 70% if appeared recently
+        }
 
-          secondaryCharacter = {
-            name: randomUser.characterName,
-            lastName: randomUser.characterLastName || '',
-            description: randomUser.characterDescription || '',
-            visualPrompt: cleanSecondaryVisualPrompt
-          };
+        if (Math.random() < baseChance) {
+          // Get list of characters that haven't appeared recently in this session
+          const recentCharacterIds = sessionScenes.slice(-3)
+            .map(scene => scene.secondaryCharacterId)
+            .filter(Boolean);
+          
+          const otherUsers = await db.select({
+            id: users.id,
+            characterName: users.characterName,
+            characterLastName: users.characterLastName,
+            characterDescription: users.characterDescription,
+            characterVisualPrompt: users.characterVisualPrompt,
+          })
+          .from(users)
+          .where(
+            sql`${users.id} != ${session.user.id} AND ${users.characterName} IS NOT NULL AND ${users.id} NOT IN (${recentCharacterIds.length > 0 ? recentCharacterIds.map(() => '?').join(',') : 'NULL'})`
+          )
+          .limit(15);
+
+          if (otherUsers.length > 0) {
+            const randomUser = otherUsers[Math.floor(Math.random() * otherUsers.length)];
+            
+            // Clean the visual prompt for the secondary character
+            let cleanSecondaryVisualPrompt = randomUser.characterVisualPrompt || '';
+            if (cleanSecondaryVisualPrompt.startsWith('Generate a pixel art style character avatar image with the following description:')) {
+              cleanSecondaryVisualPrompt = cleanSecondaryVisualPrompt.replace('Generate a pixel art style character avatar image with the following description:', '').trim();
+            }
+
+            secondaryCharacter = {
+              id: randomUser.id,
+              name: randomUser.characterName || 'Personaje Desconocido',
+              lastName: randomUser.characterLastName || '',
+              description: randomUser.characterDescription || '',
+              visualPrompt: cleanSecondaryVisualPrompt
+            };
+          }
         }
       } catch (error) {
         console.error('Error fetching secondary character:', error);
@@ -150,7 +212,8 @@ export async function POST(request: NextRequest) {
       narrative, 
       imagePrompt,
       characterVisualPrompt: includeCharacter ? characterInfo?.visualPrompt : undefined,
-      includeCharacter
+      includeCharacter,
+      secondaryCharacterId: secondaryCharacter?.id
     });
 
   } catch (error) {

@@ -23,12 +23,17 @@ function StoryChatContent() {
         input,
         isLoading,
         currentGameSession,
+        setCurrentGameSession,
         startGame,
         handleSubmit,
         setInput,
+        deleteScene,
+        regenerateScene,
     } = useZombieGame(sessionIdParam || undefined);
 
     const [loading, setLoading] = useState(false);
+    const [isEditingTitle, setIsEditingTitle] = useState(false);
+    const [editedTitle, setEditedTitle] = useState('');
 
     const handleCreateNewStory = async () => {
         setLoading(true);
@@ -38,6 +43,54 @@ function StoryChatContent() {
             toast.error('Error al crear nueva historia');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleSaveTitle = async () => {
+        if (!currentGameSession || !editedTitle.trim()) return;
+        
+        try {
+            const response = await fetch(`/api/game-sessions/${currentGameSession.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title: editedTitle.trim() }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al actualizar el título');
+            }
+
+            const data = await response.json();
+            setCurrentGameSession(data.session);
+            setIsEditingTitle(false);
+            toast.success('Título actualizado correctamente');
+        } catch (error) {
+            console.error('Error updating title:', error);
+            toast.error('Error al actualizar el título. Por favor, inténtalo de nuevo.');
+            // Revertir el título editado al original
+            setEditedTitle(currentGameSession.title || '');
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setIsEditingTitle(false);
+        setEditedTitle('');
+    };
+
+    const handleStartEdit = () => {
+        if (currentGameSession) {
+            setEditedTitle(currentGameSession.title || '');
+            setIsEditingTitle(true);
+        }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSaveTitle();
+        } else if (e.key === 'Escape') {
+            handleCancelEdit();
         }
     };
 
@@ -150,7 +203,46 @@ function StoryChatContent() {
                 <div className="flex items-center justify-center max-w-2xl mx-auto">
                     {currentGameSession && (
                         <div className="text-sm text-gray-600 text-center">
-                            <span className="font-medium">{currentGameSession.title}</span>
+                            {isEditingTitle ? (
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full max-w-md mx-auto">
+                  <input
+                    type="text"
+                    value={editedTitle}
+                    onChange={(e) => setEditedTitle(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    onBlur={handleSaveTitle}
+                    className="text-lg sm:text-xl font-bold text-primary bg-transparent border-b-2 border-primary focus:outline-none focus:border-primary/80 min-w-0 flex-1 px-2 py-1 text-center sm:text-left"
+                    autoFocus
+                    placeholder="Título de la historia"
+                  />
+                  <div className="flex justify-center sm:justify-start gap-2 mt-2 sm:mt-0">
+                    <button
+                      onClick={handleSaveTitle}
+                      className="text-green-500 hover:text-green-400 text-sm px-3 py-2 rounded-md bg-green-500/10 hover:bg-green-500/20 transition-colors min-w-[60px] flex items-center justify-center"
+                      title="Guardar (Enter)"
+                    >
+                      <span className="text-base">✓</span>
+                      <span className="ml-1 hidden sm:inline text-xs">Guardar</span>
+                    </button>
+                    <button
+                      onClick={handleCancelEdit}
+                      className="text-red-500 hover:text-red-400 text-sm px-3 py-2 rounded-md bg-red-500/10 hover:bg-red-500/20 transition-colors min-w-[60px] flex items-center justify-center"
+                      title="Cancelar (Esc)"
+                    >
+                      <span className="text-base">✗</span>
+                      <span className="ml-1 hidden sm:inline text-xs">Cancelar</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <span 
+                  className="text-xl font-bold text-primary cursor-pointer hover:text-primary/80 transition-colors"
+                  onClick={handleStartEdit}
+                  title="Haz clic para editar el título"
+                >
+                  {currentGameSession.title}
+                </span>
+              )}
                             {currentGameSession.isCompleted && (
                                 <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
                                     Completada
@@ -161,19 +253,23 @@ function StoryChatContent() {
                 </div>
             </div>
 
-            <div className='flex flex-col'>
-                <div className='flex-1'>
-                    <Conversation className='relative'>
-                        <ConversationContent className='max-w-xl mx-auto'>
+            <div className='flex flex-col h-[calc(100vh-120px)] md:h-[calc(100vh-200px)] scrollbar-hide'>
+                <div className='flex-1 overflow-hidden scrollbar-hide'>
+                    <Conversation className='relative h-full'>
+                        <ConversationContent className='max-w-xl md:max-w-3xl lg:max-w-4xl mx-auto'>
                             {messages.map(message => (
-                                <GameMessage key={message.id} message={message} />
+                                <GameMessage 
+                                    key={message.id} 
+                                    message={message}
+                                    onDeleteScene={deleteScene}
+                                />
                             ))}
                             {isLoading && <GameLoader />}
                         </ConversationContent>
                         <ConversationScrollButton />
                     </Conversation>
                 </div>
-                <div className='max-w-2xl w-full mx-auto pb-4 flex-shrink-0'>
+                <div className='max-w-2xl md:max-w-3xl lg:max-w-4xl w-full mx-auto pb-4 flex-shrink-0'>
                     <GameInput
                         input={input}
                         onInputChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
